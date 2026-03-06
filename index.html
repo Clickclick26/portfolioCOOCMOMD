@@ -1,97 +1,696 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fractional COO | CMO | MD - Transformational Leadership</title>
-    <style>
-        :root {
-            --bg: #0f172a;
-            --card: #1e293b;
-            --gold: #f59e0b;
-            --text: #f8fafc;
-            --dim: #94a3b8;
-        }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; margin: 0; padding: 0; }
-        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
-        header { text-align: center; padding-bottom: 60px; border-bottom: 1px solid #334155; }
-        h1 { color: var(--gold); margin-bottom: 10px; font-size: 2.5rem; }
-        .badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; }
-        .badge { background: var(--card); padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; border: 1px solid #334155; }
-        section { margin-top: 60px; }
-        h2 { border-left: 4px solid var(--gold); padding-left: 15px; margin-bottom: 30px; }
-        .grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        @media (min-width: 768px) { .grid { grid-template-columns: 1fr 1fr 1fr; } }
-        .card { background: var(--card); padding: 25px; border-radius: 12px; border: 1px solid #334155; }
-        .card h3 { color: var(--gold); margin-top: 0; }
-        .case-study { margin-bottom: 30px; background: #1e293b66; padding: 20px; border-radius: 8px; border-left: 2px solid var(--gold); }
-        .stat { font-weight: bold; color: var(--gold); }
-        footer { text-align: center; margin-top: 80px; padding: 40px; color: var(--dim); font-size: 0.9rem; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fractional COO · CMO · MD</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f4f1ec;
+  --ink: #0e0e0e;
+  --mid: #8a8680;
+  --faint: #e2ddd7;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html { scroll-behavior: smooth; cursor: none; }
+
+body {
+  font-family: 'Jost', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-weight: 300;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── CURSOR ── */
+#dot {
+  position: fixed; width: 6px; height: 6px;
+  background: var(--ink); border-radius: 50%;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform .15s var(--ease), width .3s var(--ease), height .3s var(--ease), background .3s ease;
+}
+#ring {
+  position: fixed; width: 32px; height: 32px;
+  border: 1px solid rgba(14,14,14,0.25); border-radius: 50%;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: width .5s var(--ease), height .5s var(--ease), border-color .3s ease;
+}
+body.on-dark #dot { background: #f4f1ec; }
+body.on-dark #ring { border-color: rgba(244,241,236,0.3); }
+#dot.hover { width: 3px; height: 3px; }
+#ring.hover { width: 52px; height: 52px; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 32px 52px;
+  display: flex; justify-content: space-between; align-items: center;
+  mix-blend-mode: normal;
+}
+.nav-name {
+  font-family: 'Cormorant', serif;
+  font-size: 1rem; font-style: italic; font-weight: 300;
+  letter-spacing: .04em; color: var(--ink);
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  font-size: .65rem; font-weight: 400; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--mid);
+  text-decoration: none; transition: color .3s ease;
+}
+.nav-links a:hover { color: var(--ink); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: grid; grid-template-columns: 1fr 1fr;
+  position: relative; overflow: hidden;
+}
+
+.hero-left {
+  background: var(--ink);
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  padding: 80px 52px;
+  position: relative; overflow: hidden;
+}
+
+/* Photo placeholder — left panel */
+.hero-photo {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  border: 1px dashed rgba(244,241,236,0.15);
+  margin: 24px;
+}
+.ph-hint {
+  font-size: .6rem; letter-spacing: .2em; text-transform: uppercase;
+  color: rgba(244,241,236,0.25); text-align: center; line-height: 2;
+}
+.ph-icon-lg { font-size: 2.5rem; color: rgba(244,241,236,0.1); margin-bottom: 16px; }
+/* ↑ REPLACE: remove .hero-photo div entirely and add:
+   <img src="your-photo.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0.7"> */
+
+.hero-left-content {
+  position: relative; z-index: 2;
+}
+.hero-location {
+  font-size: .6rem; letter-spacing: .25em; text-transform: uppercase;
+  color: rgba(244,241,236,0.35); margin-bottom: 20px;
+}
+.hero-name-card {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 300; color: #f4f1ec; line-height: 1.1;
+}
+.hero-name-card em { font-style: italic; }
+
+.hero-right {
+  background: var(--bg);
+  display: flex; flex-direction: column;
+  justify-content: center;
+  padding: 140px 64px 80px;
+}
+
+.hero-eyebrow {
+  font-size: .6rem; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--mid); margin-bottom: 28px;
+  opacity: 0; animation: up .7s var(--ease) .3s forwards;
+}
+.hero-h1 {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(3.5rem, 6vw, 5.5rem);
+  font-weight: 300; line-height: 1;
+  letter-spacing: -.01em; color: var(--ink);
+  opacity: 0; animation: up .9s var(--ease) .5s forwards;
+}
+.hero-h1 em { font-style: italic; display: block; }
+.hero-p {
+  font-size: .85rem; color: var(--mid);
+  max-width: 360px; line-height: 1.9; margin-top: 32px;
+  opacity: 0; animation: up .7s var(--ease) .7s forwards;
+}
+.hero-cta {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 44px; font-size: .62rem; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--faint);
+  padding-bottom: 8px;
+  opacity: 0; animation: up .7s var(--ease) .9s forwards;
+  transition: border-color .3s ease, gap .3s ease;
+}
+.hero-cta:hover { border-color: var(--ink); gap: 16px; }
+
+@keyframes up { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:none; } }
+
+/* ── REEL SECTION ── */
+.reel-section {
+  display: grid; grid-template-columns: 1fr 1fr;
+  min-height: 520px;
+  border-top: 1px solid var(--faint);
+}
+.reel-left {
+  background: var(--ink); position: relative;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.reel-placeholder {
+  width: 180px; height: 320px;
+  border: 1px dashed rgba(244,241,236,0.18);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 12px;
+}
+.reel-play-icon {
+  width: 48px; height: 48px;
+  border: 1px solid rgba(244,241,236,0.2);
+  border-radius: 50%; display: flex;
+  align-items: center; justify-content: center;
+  color: rgba(244,241,236,0.3); font-size: .9rem;
+  padding-left: 3px;
+}
+.reel-ph-label {
+  font-size: .58rem; letter-spacing: .18em; text-transform: uppercase;
+  color: rgba(244,241,236,0.2); text-align: center; line-height: 1.9;
+}
+/* ↑ REPLACE this whole .reel-left content with your video:
+   <video src="reel.mp4" autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover"></video>
+   OR embed: <iframe src="YOUR_URL" style="width:100%;height:100%;border:none" allowfullscreen></iframe> */
+
+.reel-right {
+  padding: 80px 64px;
+  display: flex; flex-direction: column; justify-content: center;
+  border-left: 1px solid var(--faint);
+}
+.reel-label {
+  font-size: .6rem; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--mid); margin-bottom: 40px;
+}
+.stats-list { display: flex; flex-direction: column; gap: 0; }
+.stat-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 20px 0; border-bottom: 1px solid var(--faint);
+}
+.stat-row:first-child { border-top: 1px solid var(--faint); }
+.stat-val {
+  font-family: 'Cormorant', serif;
+  font-size: 2.4rem; font-weight: 300; color: var(--ink);
+}
+.stat-desc { font-size: .7rem; color: var(--mid); letter-spacing: .05em; }
+
+/* ── WORK ── */
+.work-section { padding: 120px 52px; }
+.work-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 64px;
+  padding-bottom: 20px; border-bottom: 1px solid var(--faint);
+}
+.work-title {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 300; color: var(--ink);
+}
+.work-title em { font-style: italic; }
+.work-count { font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--mid); }
+
+.work-list { display: flex; flex-direction: column; gap: 0; }
+.work-item {
+  display: grid; grid-template-columns: 1fr 320px 200px;
+  align-items: start; gap: 48px;
+  padding: 44px 0; border-bottom: 1px solid var(--faint);
+  position: relative; transition: padding .4s var(--ease);
+}
+.work-item::before {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: var(--ink); transform: scaleX(0); transform-origin: left;
+  transition: transform .5s var(--ease);
+}
+.work-item:hover::before { transform: scaleX(1); }
+.work-item:hover { padding-left: 12px; }
+
+.wi-client {
+  font-family: 'Cormorant', serif;
+  font-size: 1.7rem; font-weight: 300; color: var(--ink); line-height: 1.1;
+}
+.wi-client em { font-style: italic; }
+.wi-sector {
+  font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--mid); margin-top: 8px;
+}
+.wi-body { font-size: .78rem; color: var(--mid); line-height: 1.85; }
+.wi-tags { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; padding-top: 4px; }
+.wi-tag {
+  font-size: .58rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--mid); border: 1px solid var(--faint);
+  padding: 4px 12px;
+  transition: border-color .3s ease, color .3s ease;
+}
+.work-item:hover .wi-tag { border-color: var(--ink); color: var(--ink); }
+
+/* canvas visual inside work item */
+.wi-vis {
+  display: none; /* shown on hover or as accent — canvas vis live below each item */
+}
+
+/* ── CANVAS ACCENTS in work ── */
+.work-canvas-row {
+  width: 100%; height: 200px; overflow: hidden;
+  border-bottom: 1px solid var(--faint);
+  position: relative;
+}
+.work-canvas-row canvas { width: 100%; height: 100%; display: block; }
+.work-canvas-label {
+  position: absolute; bottom: 16px; left: 24px;
+  font-size: .55rem; letter-spacing: .18em; text-transform: uppercase;
+  color: rgba(14,14,14,0.3);
+}
+
+/* ── ABOUT ── */
+.about-section {
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--faint);
+}
+.about-left {
+  padding: 80px 52px; border-right: 1px solid var(--faint);
+}
+.about-section-label {
+  font-size: .6rem; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--mid); margin-bottom: 40px;
+}
+.about-bio {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  font-weight: 300; line-height: 1.5; color: var(--ink);
+  margin-bottom: 40px;
+}
+.about-bio em { font-style: italic; }
+.about-detail {
+  font-size: .78rem; color: var(--mid); line-height: 1.9; margin-bottom: 12px;
+}
+.about-detail strong { color: var(--ink); font-weight: 400; }
+
+.about-right { padding: 80px 52px; }
+.cred-list { display: flex; flex-direction: column; }
+.cred-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 16px 0; border-bottom: 1px solid var(--faint);
+  transition: padding .3s var(--ease);
+}
+.cred-row:first-child { border-top: 1px solid var(--faint); }
+.cred-row:hover { padding-left: 8px; }
+.cred-name { font-size: .78rem; color: var(--ink); font-weight: 400; }
+.cred-sub { font-size: .65rem; color: var(--mid); letter-spacing: .06em; }
+
+/* ── FOOTER ── */
+footer {
+  padding: 40px 52px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid var(--faint);
+}
+.ft-l {
+  font-family: 'Cormorant', serif; font-size: .9rem;
+  font-style: italic; font-weight: 300; color: var(--mid);
+}
+.ft-r { font-size: .6rem; letter-spacing: .15em; text-transform: uppercase; color: var(--mid); }
+
+/* ── REVEAL ── */
+.rev { opacity: 0; transform: translateY(24px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+.rev.in { opacity: 1; transform: none; }
+.rv1 { transition-delay: .1s; } .rv2 { transition-delay: .2s; } .rv3 { transition-delay: .3s; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 860px) {
+  html { cursor: auto; } #dot, #ring { display: none; }
+  nav { padding: 24px 24px; }
+  .nav-links { gap: 20px; }
+  .hero, .reel-section, .about-section { grid-template-columns: 1fr; }
+  .hero-left { min-height: 50vh; }
+  .hero-right { padding: 60px 24px 80px; }
+  .reel-left { min-height: 420px; }
+  .reel-right { padding: 52px 24px; border-left: none; border-top: 1px solid var(--faint); }
+  .work-section { padding: 80px 24px; }
+  .work-item { grid-template-columns: 1fr; gap: 16px; }
+  .wi-tags { align-items: flex-start; flex-direction: row; flex-wrap: wrap; }
+  .about-section { grid-template-columns: 1fr; }
+  .about-left { padding: 60px 24px; border-right: none; border-bottom: 1px solid var(--faint); }
+  .about-right { padding: 52px 24px; }
+  footer { padding: 32px 24px; flex-direction: column; gap: 8px; text-align: center; }
+}
+</style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>Transformational Leader of the Year (Shortlist 2026)</h1>
-        <p><strong>Fractional COO • CMO • Managing Director</strong></p>
-        <p>Belfast-based Agency Founder | Invest NI Backed | GUA Awards Judge</p>
-        <div class="badges">
-            <span class="badge">PRINCE2</span>
-            <span class="badge">Lean Six Sigma</span>
-            <span class="badge">Python</span>
-            <span class="badge">Make.com / Zapier</span>
-            <span class="badge">BA (Hons) Business Management</span>
-        </div>
-    </header>
+<div id="dot"></div>
+<div id="ring"></div>
 
-    <section>
-        <h2>Executive Services</h2>
-        <div class="grid">
-            <div class="card">
-                <h3>Fractional COO</h3>
-                <p>Scaling operations through automation, Lean principles, and rigorous project management frameworks.</p>
-            </div>
-            <div class="card">
-                <h3>Fractional CMO</h3>
-                <p>Driving high-growth sales strategies for major brands using data-led marketing and technical integration.</p>
-            </div>
-            <div class="card">
-                <h3>Managing Director</h3>
-                <p>Providing high-level governance and transformational leadership to agencies looking to scale internationally.</p>
-            </div>
-        </div>
-    </section>
+<!-- NAV -->
+<nav>
+  <a class="nav-name" href="#home">Portfolio '26</a>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+</nav>
 
-    <section>
-        <h2>Growth Case Studies</h2>
-        
-        <div class="case-study">
-            <h3>Revolución de Cuba</h3>
-            <p><strong>The Challenge:</strong> Fragmented customer booking journeys and manual marketing workflows across UK sites.</p>
-            <p><strong>The Solution:</strong> Integrated custom **Zapier** and **Make.com** automations to sync booking data with CRM triggers. Refined the sales funnel for corporate bookings using Python scripts to clean legacy data.</p>
-            <p><strong>The Result:</strong> Achieved a <span class="stat">28% increase in repeat bookings</span> and a significant uplift in high-value corporate sales via automated lead nurturing.</p>
-        </div>
+<!-- HERO -->
+<section class="hero" id="home">
 
-        <div class="case-study">
-            <h3>L'Occitane</h3>
-            <p><strong>The Challenge:</strong> Improving operational efficiency in digital-to-store customer acquisition for seasonal campaigns.</p>
-            <p><strong>The Solution:</strong> Applied **Lean Six Sigma** to streamline campaign deployment. Built custom internal dashboards to monitor real-time sales attribution across London and regional hubs.</p>
-            <p><strong>The Result:</strong> Reduced campaign setup time by <span class="stat">40%</span> and drove a <span class="stat">15% growth in retail footfall</span> during peak gifting periods.</p>
-        </div>
+  <!-- LEFT — portrait placeholder -->
+  <div class="hero-left">
+    <div class="hero-photo">
+      <div class="ph-icon-lg">◻</div>
+      <div class="ph-hint">
+        Your portrait photo<br>
+        <span style="opacity:.5;font-size:.55rem">Replace this block with &lt;img src="photo.jpg"&gt;</span>
+      </div>
+    </div>
+    <div class="hero-left-content">
+      <div class="hero-location">Belfast · London · EMEA</div>
+      <div class="hero-name-card">Fractional<br><em>Leader</em></div>
+    </div>
+  </div>
 
-        <div class="case-study">
-            <h3>Nexus IT Infrastructure</h3>
-            <p><strong>The Challenge:</strong> A scaling IT firm struggling with project delivery bottlenecks and inconsistent sales pipelines.</p>
-            <p><strong>The Solution:</strong> Implemented **PRINCE2** methodology for all technical deployments. Developed a Python-based lead scoring tool to prioritise high-margin enterprise contracts.</p>
-            <p><strong>The Result:</strong> Scaled revenue by <span class="stat">£1.2M in 12 months</span> and improved client retention rates to 95% through better delivery governance.</p>
-        </div>
-    </section>
+  <!-- RIGHT — intro -->
+  <div class="hero-right">
+    <div class="hero-eyebrow">Invest NI Backed · GUA Awards Judge, Dublin · EMEA Experience</div>
+    <h1 class="hero-h1">COO · CMO<em>· MD</em></h1>
+    <p class="hero-p">C-suite impact without the full-time overhead. Scaling businesses across the UK, Ireland, and EMEA through automation, Lean principles, and transformational leadership.</p>
+    <a href="#work" class="hero-cta">View the work <span>→</span></a>
+  </div>
 
-    <section>
-        <h2>Professional Background</h2>
-        <p>Broad experience leading growth for major brands and agencies, including <strong>Yell</strong>, <strong>MRP (First Derivative)</strong>, and tier-one <strong>London agencies</strong>. Currently leading an Invest NI-backed agency focused on international expansion from a Belfast city centre base.</p>
-    </section>
+</section>
 
-    <footer>
-        <p
+<!-- REEL + STATS -->
+<section class="reel-section" id="reel">
+
+  <!-- LEFT — vertical reel placeholder -->
+  <div class="reel-left">
+    <div class="reel-placeholder">
+      <div class="reel-play-icon">▶</div>
+      <div class="reel-ph-label">
+        Your reel<br>
+        <span style="font-size:.52rem;opacity:.6">9:16 · replace with video or embed</span>
+      </div>
+    </div>
+    <!--
+      TO REPLACE WITH VIDEO:
+      Remove the .reel-placeholder div above and add one of:
+
+      Local MP4:
+      <video src="reel.mp4" autoplay muted loop playsinline
+        style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>
+
+      YouTube Shorts / Vimeo embed:
+      <iframe src="YOUR_EMBED_URL"
+        style="position:absolute;inset:0;width:100%;height:100%;border:none" allowfullscreen></iframe>
+    -->
+  </div>
+
+  <!-- RIGHT — key numbers -->
+  <div class="reel-right rev">
+    <div class="reel-label">By the numbers</div>
+    <div class="stats-list">
+      <div class="stat-row">
+        <span class="stat-val" data-t="95" data-s="%">0%</span>
+        <span class="stat-desc">Client retention</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-val" data-t="1.2" data-p="£" data-s="M">£0M</span>
+        <span class="stat-desc">Revenue growth in 12 months</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-val" data-t="40" data-s="%">0%</span>
+        <span class="stat-desc">Faster campaign deployment</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-val" data-t="28" data-s="%">0%</span>
+        <span class="stat-desc">Increase in repeat bookings</span>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- WORK -->
+<section class="work-section" id="work">
+  <div class="work-header rev">
+    <h2 class="work-title">Selected <em>Work</em></h2>
+    <span class="work-count">03 projects</span>
+  </div>
+
+  <div class="work-list">
+
+    <!-- Cuba visual canvas -->
+    <div class="work-canvas-row rev"><canvas id="cv-cuba"></canvas><span class="work-canvas-label">Revolución de Cuba · Video + Automation</span></div>
+    <div class="work-item rev rv1">
+      <div>
+        <div class="wi-client">Revolución<br><em>de Cuba</em></div>
+        <div class="wi-sector">Hospitality · UK Multi-Site</div>
+      </div>
+      <div class="wi-body">Led end-to-end video production for brand and event content. Integrated Zapier and Make.com automations to sync booking data with CRM. Python scripts cleaned legacy data and refined the corporate sales funnel — resulting in a 28% increase in repeat bookings and significant uplift in corporate sales.</div>
+      <div class="wi-tags">
+        <span class="wi-tag">Video Production</span>
+        <span class="wi-tag">Zapier</span>
+        <span class="wi-tag">Python</span>
+        <span class="wi-tag">CRM</span>
+      </div>
+    </div>
+
+    <!-- Occitane visual canvas -->
+    <div class="work-canvas-row rev"><canvas id="cv-locc"></canvas><span class="work-canvas-label">L'Occitane · Christmas Campaign Videography</span></div>
+    <div class="work-item rev rv1">
+      <div>
+        <div class="wi-client"><em>L'Occitane</em></div>
+        <div class="wi-sector">Luxury Retail · Christmas Campaign</div>
+      </div>
+      <div class="wi-body">Managed full Christmas campaign videography — concept through shoot to delivery. Applied Lean Six Sigma to streamline deployment across London and regional hubs. Built real-time attribution dashboards. Reduced campaign setup time by 40% and drove 15% footfall growth during peak gifting.</div>
+      <div class="wi-tags">
+        <span class="wi-tag">Videography</span>
+        <span class="wi-tag">Lean Six Sigma</span>
+        <span class="wi-tag">Analytics</span>
+      </div>
+    </div>
+
+    <!-- Nexus visual canvas -->
+    <div class="work-canvas-row rev"><canvas id="cv-nexus"></canvas><span class="work-canvas-label">Nexus IT · Enterprise Scale-Up</span></div>
+    <div class="work-item rev rv1">
+      <div>
+        <div class="wi-client">Nexus <em>IT</em></div>
+        <div class="wi-sector">Enterprise Technology · Scale-Up</div>
+      </div>
+      <div class="wi-body">Implemented PRINCE2 governance across all technical deployments. Built a Python lead scoring engine to prioritise high-margin enterprise contracts. Scaled revenue by £1.2M in 12 months and improved client retention to 95% through better delivery frameworks.</div>
+      <div class="wi-tags">
+        <span class="wi-tag">PRINCE2</span>
+        <span class="wi-tag">Python</span>
+        <span class="wi-tag">Lead Scoring</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div class="about-left rev">
+    <div class="about-section-label">About</div>
+    <p class="about-bio">Transformational leader.<br><em>Shortlisted 2026.</em></p>
+    <p class="about-detail">Experience leading growth across the UK, Ireland, and EMEA — including <strong>Yell</strong> (UK &amp; Ireland), <strong>MRP (First Derivative)</strong> (EMEA), and tier-one London agencies. Currently founding and leading an <strong>Invest NI-backed agency</strong> expanding internationally from Belfast.</p>
+    <p class="about-detail" style="margin-top:16px">Recognised as a judge at the <strong>GUA Awards, Dublin</strong> — dubbed the junior Nobel Prize — and shortlisted for <strong>Transformational Leader of the Year 2026</strong>. Available for fractional COO, CMO, and MD engagements.</p>
+  </div>
+  <div class="about-right rev rv2">
+    <div class="about-section-label">Credentials</div>
+    <div class="cred-list">
+      <div class="cred-row"><span class="cred-name">PRINCE2 Practitioner</span><span class="cred-sub">Project Management</span></div>
+      <div class="cred-row"><span class="cred-name">Lean Six Sigma</span><span class="cred-sub">Process & Efficiency</span></div>
+      <div class="cred-row"><span class="cred-name">Videography Direction</span><span class="cred-sub">Brand & Campaign</span></div>
+      <div class="cred-row"><span class="cred-name">Python · Make.com · Zapier</span><span class="cred-sub">Automation & Data</span></div>
+      <div class="cred-row"><span class="cred-name">BA (Hons) Business Management</span><span class="cred-sub">Academic</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-l">Portfolio '26</div>
+  <div class="ft-r">Belfast · London · EMEA · © 2026</div>
+</footer>
+
+<script>
+function lerp(a,b,t){return a+(b-a)*t}
+function rand(a,b){return a+Math.random()*(b-a)}
+
+/* CURSOR */
+const dot=document.getElementById('dot'), ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX; my=e.clientY;
+  dot.style.left=mx+'px'; dot.style.top=my+'px';
+});
+(function loop(){
+  rx=lerp(rx,mx,.1); ry=lerp(ry,my,.1);
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a,.work-item,.cred-row').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{dot.classList.add('hover');ring.classList.add('hover')});
+  el.addEventListener('mouseleave',()=>{dot.classList.remove('hover');ring.classList.remove('hover')});
+});
+// Dark section cursor colour
+const darkSections=[document.querySelector('.hero-left'),document.querySelector('.reel-left')];
+window.addEventListener('scroll',()=>{
+  const y=scrollY+window.innerHeight/2;
+  const onDark=darkSections.some(s=>{if(!s)return false;const r=s.getBoundingClientRect();return r.top<window.innerHeight/2&&r.bottom>window.innerHeight/2});
+  document.body.classList.toggle('on-dark',onDark);
+},{passive:true});
+
+/* REVEAL */
+const ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.08,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.rev').forEach(el=>ro.observe(el));
+
+/* COUNTERS */
+function count(el){
+  const t=parseFloat(el.dataset.t),pre=el.dataset.p||'',suf=el.dataset.s||'',fl=t%1!==0,dur=1800,s=performance.now();
+  (function f(n){const p=Math.min((n-s)/dur,1),e=1-Math.pow(1-p,4);el.textContent=pre+(fl?(t*e).toFixed(1):Math.round(t*e))+suf;if(p<1)requestAnimationFrame(f)})(s);
+}
+new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.querySelectorAll('[data-t]').forEach(count)}),{threshold:.3}).observe(document.querySelector('.reel-right'));
+
+/* ═══ CANVAS: CUBA — warm amber bokeh, horizontal light streaks ═══ */
+(function(){
+  const cv=document.getElementById('cv-cuba'),ctx=cv.getContext('2d');
+  let bokeh=[],streaks=[],t=0,ready=false;
+  function init(W,H){
+    bokeh=[];streaks=[];
+    for(let i=0;i<40;i++)bokeh.push({x:rand(0,1),y:rand(0,1),r:rand(18,80),h:rand(16,36),a:rand(.03,.14),vx:rand(-.0002,.0002),vy:rand(-.00015,.00015),ph:rand(0,6.28),fr:rand(.003,.009)});
+    for(let i=0;i<12;i++)streaks.push({x:rand(-.2,1),y:rand(.1,.9),len:rand(.08,.25),sp:rand(.0004,.0018),a:rand(.05,.15),w:rand(.4,1.5),h:rand(14,42)});
+    ready=true;
+  }
+  function draw(){
+    const W=cv.offsetWidth,H=cv.offsetHeight;
+    cv.width=W; cv.height=H;
+    if(!ready)init(W,H);
+    ctx.fillStyle='#0a0503'; ctx.fillRect(0,0,W,H);
+    const vg=ctx.createRadialGradient(W*.5,H*.5,0,W*.5,H*.5,H);
+    vg.addColorStop(0,'rgba(60,20,2,.18)'); vg.addColorStop(1,'rgba(0,0,0,.6)');
+    ctx.fillStyle=vg; ctx.fillRect(0,0,W,H);
+    t++;
+    bokeh.forEach(b=>{
+      b.x+=b.vx; b.y+=b.vy;
+      if(b.x<-.1)b.x=1.1; if(b.x>1.1)b.x=-.1;
+      if(b.y<-.1)b.y=1.1; if(b.y>1.1)b.y=-.1;
+      const p=Math.sin(t*b.fr+b.ph)*.28+.72;
+      const g=ctx.createRadialGradient(b.x*W,b.y*H,0,b.x*W,b.y*H,b.r*p);
+      g.addColorStop(0,`hsla(${b.h},85%,55%,${b.a*p})`); g.addColorStop(1,'transparent');
+      ctx.fillStyle=g; ctx.fillRect(b.x*W-b.r,b.y*H-b.r,b.r*2,b.r*2);
+    });
+    streaks.forEach(s=>{
+      s.x+=s.sp; if(s.x>1.1)s.x=-s.len-.05;
+      const x1=s.x*W,x2=(s.x+s.len)*W,y=s.y*H;
+      const g=ctx.createLinearGradient(x1,y,x2,y);
+      g.addColorStop(0,`hsla(${s.h},90%,60%,0)`);
+      g.addColorStop(.5,`hsla(${s.h},90%,60%,${s.a})`);
+      g.addColorStop(1,`hsla(${s.h},90%,60%,0)`);
+      ctx.beginPath(); ctx.moveTo(x1,y); ctx.lineTo(x2,y);
+      ctx.strokeStyle=g; ctx.lineWidth=s.w; ctx.stroke();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ═══ CANVAS: L'OCCITANE — Christmas: deep blue + gold snow ═══ */
+(function(){
+  const cv=document.getElementById('cv-locc'),ctx=cv.getContext('2d');
+  let flakes=[],t=0,ready=false;
+  const flares=[{x:.12,y:.4,r:70,a:.09,h:50},{x:.65,y:.2,r:48,a:.07,h:46},{x:.85,y:.7,r:55,a:.06,h:48}];
+  function init(){
+    flakes=[];
+    for(let i=0;i<100;i++)flakes.push({x:rand(0,1),y:rand(0,1),r:rand(.4,2),sp:rand(.0003,.0012),dr:rand(-.0002,.0002),a:rand(.3,.9),gold:Math.random()>.6,ph:rand(0,6.28)});
+    ready=true;
+  }
+  function draw(){
+    const W=cv.offsetWidth,H=cv.offsetHeight;
+    cv.width=W; cv.height=H;
+    if(!ready)init();
+    ctx.fillStyle='#030208'; ctx.fillRect(0,0,W,H);
+    const bg=ctx.createRadialGradient(W*.4,H*.4,0,W*.4,H*.4,W*.8);
+    bg.addColorStop(0,'rgba(7,9,28,.92)'); bg.addColorStop(1,'rgba(2,2,8,.98)');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+    t++;
+    flares.forEach(f=>{
+      const p=Math.sin(t*.011+f.x*7)*.2+.8;
+      const g=ctx.createRadialGradient(f.x*W,f.y*H,0,f.x*W,f.y*H,f.r*p);
+      g.addColorStop(0,`hsla(${f.h},72%,62%,${f.a*p})`); g.addColorStop(1,'transparent');
+      ctx.fillStyle=g; ctx.fillRect(f.x*W-f.r,f.y*H-f.r,f.r*2,f.r*2);
+    });
+    flakes.forEach(fl=>{
+      fl.y+=fl.sp; fl.x+=fl.dr+Math.sin(t*.02+fl.ph)*.00008;
+      if(fl.y>1.05)fl.y=-.05; if(fl.x<0)fl.x=1; if(fl.x>1)fl.x=0;
+      const x=fl.x*W,y=fl.y*H,p=Math.sin(t*.04+fl.ph)*.12+.88;
+      if(fl.gold){
+        ctx.beginPath(); ctx.arc(x,y,fl.r*1.2*p,0,6.28); ctx.fillStyle=`rgba(215,170,50,${fl.a*p})`; ctx.fill();
+        if(fl.r>1.3){ctx.strokeStyle=`rgba(255,210,80,${fl.a*.4})`;ctx.lineWidth=.4;ctx.beginPath();ctx.moveTo(x-fl.r*2.2,y);ctx.lineTo(x+fl.r*2.2,y);ctx.stroke();ctx.beginPath();ctx.moveTo(x,y-fl.r*2.2);ctx.lineTo(x,y+fl.r*2.2);ctx.stroke()}
+      } else {
+        ctx.beginPath(); ctx.arc(x,y,fl.r*p,0,6.28); ctx.fillStyle=`rgba(190,205,235,${fl.a*p*.65})`; ctx.fill();
+      }
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ═══ CANVAS: NEXUS — data nodes + packets ═══ */
+(function(){
+  const cv=document.getElementById('cv-nexus'),ctx=cv.getContext('2d');
+  let nodes=[],pkts=[],t=0,W=0,H=0;
+  function init(w,h){
+    nodes=[];
+    for(let r=0;r<4;r++)for(let c=0;c<11;c++)
+      if(Math.random()>.2)nodes.push({x:(c/10)+rand(-.04,.04),y:(.18+r*.22)+rand(-.03,.03),r:rand(.8,2.2),on:Math.random()>.45,ph:rand(0,6.28),fr:rand(.02,.06),conn:[]});
+    nodes.forEach((n,i)=>nodes.forEach((m,j)=>{if(i!==j&&Math.hypot((n.x-m.x)*w,(n.y-m.y)*h)<w*.17&&Math.random()>.4)n.conn.push(j)}));
+  }
+  function spawnPkt(){if(!nodes.length)return;const fi=Math.floor(rand(0,nodes.length));if(!nodes[fi].conn.length)return;pkts.push({fi,ti:nodes[fi].conn[Math.floor(rand(0,nodes[fi].conn.length))],t:0,sp:rand(.007,.022)})}
+  function draw(){
+    const nW=cv.offsetWidth,nH=cv.offsetHeight;
+    if(nW!==W||nH!==H){W=nW;H=nH;cv.width=W;cv.height=H;init(W,H)}
+    ctx.fillStyle='#030810'; ctx.fillRect(0,0,W,H);
+    const bg=ctx.createRadialGradient(W*.5,H*.5,0,W*.5,H*.5,W*.55);
+    bg.addColorStop(0,'rgba(9,22,50,.93)'); bg.addColorStop(1,'rgba(3,8,16,.98)');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+    t++;
+    if(t%20===0)spawnPkt();
+    nodes.forEach(n=>n.conn.forEach(j=>{const m=nodes[j];ctx.beginPath();ctx.moveTo(n.x*W,n.y*H);ctx.lineTo(m.x*W,m.y*H);ctx.strokeStyle=`rgba(74,127,165,${n.on&&m.on?.05:.018})`;ctx.lineWidth=.5;ctx.stroke()}));
+    for(let i=pkts.length-1;i>=0;i--){
+      const pk=pkts[i]; pk.t+=pk.sp; if(pk.t>1){pkts.splice(i,1);continue}
+      const fn=nodes[pk.fi],tn=nodes[pk.ti];
+      const x=lerp(fn.x*W,tn.x*W,pk.t),y=lerp(fn.y*H,tn.y*H,pk.t);
+      ctx.beginPath(); ctx.arc(x,y,1.8,0,6.28); ctx.fillStyle='rgba(120,178,218,.88)'; ctx.fill();
+      const t2=Math.max(0,pk.t-.14),tx2=lerp(fn.x*W,tn.x*W,t2),ty2=lerp(fn.y*H,tn.y*H,t2);
+      const tg=ctx.createLinearGradient(tx2,ty2,x,y);
+      tg.addColorStop(0,'rgba(74,127,165,0)'); tg.addColorStop(1,'rgba(120,178,218,.38)');
+      ctx.beginPath();ctx.moveTo(tx2,ty2);ctx.lineTo(x,y);ctx.strokeStyle=tg;ctx.lineWidth=1.2;ctx.stroke();
+    }
+    nodes.forEach(n=>{
+      const g=n.on?(Math.sin(t*n.fr+n.ph)*.38+.62):.22;
+      const x=n.x*W,y=n.y*H;
+      ctx.beginPath(); ctx.arc(x,y,n.r,0,6.28);
+      ctx.fillStyle=n.on?`rgba(130,185,218,${g})`:'rgba(50,80,108,.35)'; ctx.fill();
+    });
+    const sy=(t*.25)%H;
+    const sg=ctx.createLinearGradient(0,sy-6,0,sy+2);
+    sg.addColorStop(0,'rgba(74,127,165,0)'); sg.addColorStop(1,'rgba(74,127,165,.035)');
+    ctx.fillStyle=sg; ctx.fillRect(0,sy-6,W,8);
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>
